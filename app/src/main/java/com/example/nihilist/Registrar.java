@@ -2,18 +2,31 @@ package com.example.nihilist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Registrar extends AppCompatActivity {
 
-    EditText dni, email, nombre, apellido, tipo;
+    EditText dni, email, nombre, apellido, tipo, password;
     Button registrar, ayuda;
 
     @Override
@@ -28,6 +41,8 @@ public class Registrar extends AppCompatActivity {
         nombre = (EditText) findViewById(R.id.getNombre);
         apellido = (EditText) findViewById(R.id.getApellido);
         tipo = (EditText) findViewById(R.id.getTipo);
+        password = (EditText) findViewById(R.id.getPass);
+
 
 
         registrar.setOnClickListener(new View.OnClickListener() {
@@ -35,21 +50,60 @@ public class Registrar extends AppCompatActivity {
             public void onClick(View v) {
                 if (validarDNI(dni.getText().toString())==false){
                     dni.setError("Este campo no cumple las condiciones [0-9]&[aA-zZ]");
-                }
-                if (validarEmail(email.getText().toString())==false){
-                    email.setError("Este campo no cumple las condiciones [A-Za-z0-9][@][a-z].[a-z]");
-                }
-                if (nombre.getText().toString().equals("")||nombre.getText().toString().equals("Example.")){
-                    nombre.setError("Este campo no cumple las condiciones [A-Za-z]");
-                }
-                if (apellido.getText().toString().equals("")||apellido.getText().toString().equals("Example.")){
-                    apellido.setError("Este campo no cumple las condiciones [A-Za-z]");
-                }
-                if (validarTipo(tipo.getText().toString())==false){
-                    tipo.setError("Este campo solo puede ser alumno, o profesor");
+                }else{
+                    if (validarEmail(email.getText().toString())==false){
+                        email.setError("Este campo no cumple las condiciones [A-Za-z0-9][@][a-z].[a-z]");
+                    }else{
+                        if (nombre.getText().toString().equals("")||nombre.getText().toString().equals("Example.")){
+                            nombre.setError("Este campo no cumple las condiciones [A-Za-z]");
+                        }else{
+                            if (apellido.getText().toString().equals("")||apellido.getText().toString().equals("Example.")){
+                                apellido.setError("Este campo no cumple las condiciones [A-Za-z]");
+                            }else{
+                                ejecutarServicioRegistro("https://sqliteludens.000webhostapp.com/connect/insertar.php");
+                                guardarPreferencuas(nombre, password);
+                                Intent i = new Intent(Registrar.this, Inicio.class);
+                                startActivity(i);
+                            }
+                        }
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * METODO PARA EL REGISTRO DE UN NUEVO USUARIO
+     * @param URL
+     */
+    private void ejecutarServicioRegistro(String URL){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(), "Operacion Exitosa", Toast.LENGTH_SHORT).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parametros= new HashMap<String, String>();
+                parametros.put("email", email.getText().toString());
+                parametros.put("id_usuario", dni.getText().toString());
+                parametros.put("name", nombre.getText().toString());
+                parametros.put("password", password.getText().toString());
+                parametros.put("surname", apellido.getText().toString());
+                parametros.put("tipo", tipo.getText().toString());
+                return parametros;
+            }
+        };
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     /**
@@ -132,15 +186,21 @@ public class Registrar extends AppCompatActivity {
     }
 
     /**
-     * VALIDA EL TIPO DE USUARIO
-     * @param tipo
-     * @return
+     * GUARDAR PREFERENCIAS(USUARIOS)
+     * @param getUsuario
+     * @param getPass
      */
-    public boolean validarTipo(String tipo){
-        if (tipo.toUpperCase()!="ALUMNO" || tipo.toUpperCase()!="PROFESOR"){
-            return false;
-        }else {
-            return true;
-        }
+    private void guardarPreferencuas(EditText getUsuario, EditText getPass) {
+        SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+
+        String usuario=getUsuario.getText().toString();
+        String contras=getPass.getText().toString();
+
+        SharedPreferences.Editor editor =  preferences.edit();
+
+        editor.putString("user", usuario);
+        editor.putString("pass", contras);
+
+        editor.commit();
     }
 }
