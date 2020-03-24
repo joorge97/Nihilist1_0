@@ -16,8 +16,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button registrar, iniciar;
     EditText getUsuario, getPass;
+    RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         iniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validarUsuario("https://sqliteludens.000webhostapp.com/connect/validar_usuario.php");
-                guardarPreferencuas(getUsuario, getPass);
+                validarUsuario("https://sqliteludens.000webhostapp.com/connect/validar_usuarios.php?id_usuario="
+                        +getUsuario.getText()+"&&password="+getPass.getText()+"");
             }
         });
         registrar.setOnClickListener(new View.OnClickListener() {
@@ -74,54 +80,73 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * GUARDAR PREFERENCIAS(USUARIOS)
-     * @param getUsuario
-     * @param getPass
+     * @param id_usuario
+     * @param password
+     * @param tipo
+     * @param name
+     * @param surname
+     * @param email
+     * @param session
      */
-    private void guardarPreferencuas(EditText getUsuario, EditText getPass) {
+    private void guardarPreferencuas(String id_usuario, String password, String tipo, String name, String surname, String email, Boolean session) {
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
-
-        String usuario=getUsuario.getText().toString();
-        String contras=getPass.getText().toString();
-
         SharedPreferences.Editor editor =  preferences.edit();
 
-        editor.putString("user", usuario);
-        editor.putString("pass", contras);
+        editor.putString("user", id_usuario);
+        editor.putString("pass", password);
+        editor.putString("tipo", tipo);
+        editor.putString("name", name);
+        editor.putString("surname", surname);
+        editor.putString("email", email);
+        editor.putBoolean("sesion", session);
 
         editor.commit();
     }
 
-    /**
-     * ACCESO A EL USUARIO
-     * @param URL
-     */
-    private void validarUsuario (String URL){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+    private void cargarPreferencias(EditText getUsuario, EditText getPass){
+        SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        getUsuario.setText(preferences.getString("user", "Example."));
+        getUsuario.setText(preferences.getString("pass", "Example."));
+    }
+
+
+    private void validarUsuario(String URL){
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(String response) {
-                if (!response.isEmpty()){
-                    Intent i = new Intent(getApplicationContext(), Inicio.class);
-                    startActivity(i);
-                }else{
-                    Toast.makeText(MainActivity.this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+            public void onResponse(JSONArray response) {
+                JSONObject jsonObject = null;
+                String id_usuario, tipo, name, surname, email, password;
+                Boolean session;
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        jsonObject = response.getJSONObject(i);
+                        if (jsonObject.getString("id_usuario").equals(getUsuario.getText())) {
+                            Intent inte = new Intent(MainActivity.this, Inicio.class);
+                            startActivity(inte);
+                            id_usuario=jsonObject.getString("id_usuario");
+                            tipo=jsonObject.getString("id_usuario");
+                            name=jsonObject.getString("id_usuario");
+                            surname=jsonObject.getString("id_usuario");
+                            email=jsonObject.getString("id_usuario");
+                            password=jsonObject.getString("id_usuario");
+                            session=true;
+                            guardarPreferencuas(id_usuario, password, tipo, name, surname, email, session);
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error de conexion", Toast.LENGTH_SHORT).show();
             }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros=new HashMap<String, String>();
-                parametros.put("usuario", getUsuario.getText().toString());
-                parametros.put("password", getPass.getText().toString());
-                return parametros;
-            }
-        };
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        }
+        );
+        requestQueue=Volley.newRequestQueue(this);
+        requestQueue.add(jsonArrayRequest);
     }
+
 
 }

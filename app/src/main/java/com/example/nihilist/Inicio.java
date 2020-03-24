@@ -65,7 +65,7 @@ public class Inicio extends AppCompatActivity {
 
     private void cargarPreferencias(Button usuario) {
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
-        String user = preferences.getString("user", "No existe");
+        String user = preferences.getString("name", "No existe");
         usuario.setText(user);
     }
 

@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,15 +22,26 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author Jorge
+ */
 public class Registrar extends AppCompatActivity {
 
-    EditText dni, email, nombre, apellido, tipo, password;
+    EditText dni;
+    EditText email;
+    EditText nombre;
+    EditText apellido;
+    Spinner tipo;
+    EditText password;
     Button registrar, ayuda;
+    ListView opciones;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +54,55 @@ public class Registrar extends AppCompatActivity {
         email = (EditText) findViewById(R.id.getEmail);
         nombre = (EditText) findViewById(R.id.getNombre);
         apellido = (EditText) findViewById(R.id.getApellido);
-        tipo = (EditText) findViewById(R.id.getTipo);
         password = (EditText) findViewById(R.id.getPass);
 
+        // FUNCION SPINNER
+        tipo = (Spinner) findViewById(R.id.getTipo);
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.opciones, android.R.layout.simple_spinner_item);
+        tipo.setAdapter(adapter);
 
+        // FUNCIONES VISUALES
+        dni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dni.setText("");
+                dni.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
+        });
 
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                email.setText("");
+                email.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
+        });
+
+        nombre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nombre.setText("");
+                nombre.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
+        });
+
+        apellido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                apellido.setText("");
+                apellido.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
+        });
+
+        password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                password.setText("");
+                password.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
+        });
+
+        // LISTENER "registrar" PARA REGISTRAR USUARIO
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +118,8 @@ public class Registrar extends AppCompatActivity {
                             if (apellido.getText().toString().equals("")||apellido.getText().toString().equals("Example.")){
                                 apellido.setError("Este campo no cumple las condiciones [A-Za-z]");
                             }else{
-                                ejecutarServicioRegistro("https://sqliteludens.000webhostapp.com/connect/insertar.php");
-                                guardarPreferencuas(nombre, password);
-                                Intent i = new Intent(Registrar.this, Inicio.class);
-                                startActivity(i);
+                                ejecutarServicioRegistro("https://sqliteludens.000webhostapp.com/connect/registrar.php");
+                                Toast.makeText(getApplicationContext(), "Registrado con exito", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -98,7 +154,7 @@ public class Registrar extends AppCompatActivity {
                 parametros.put("name", nombre.getText().toString());
                 parametros.put("password", password.getText().toString());
                 parametros.put("surname", apellido.getText().toString());
-                parametros.put("tipo", tipo.getText().toString());
+                parametros.put("tipo", tipo.getSelectedItem().toString());
                 return parametros;
             }
         };
@@ -183,24 +239,5 @@ public class Registrar extends AppCompatActivity {
         } else {
             return false;
         }
-    }
-
-    /**
-     * GUARDAR PREFERENCIAS(USUARIOS)
-     * @param getUsuario
-     * @param getPass
-     */
-    private void guardarPreferencuas(EditText getUsuario, EditText getPass) {
-        SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
-
-        String usuario=getUsuario.getText().toString();
-        String contras=getPass.getText().toString();
-
-        SharedPreferences.Editor editor =  preferences.edit();
-
-        editor.putString("user", usuario);
-        editor.putString("pass", contras);
-
-        editor.commit();
     }
 }
