@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/usuario"
-        android:layout_width="67dp"
+        android:layout_width="127dp"
         android:layout_height="67dp"
         android:background="@drawable/boton_redondo"
         android:textColor="@color/whiteBase"
@@ -23,7 +23,7 @@
 
     <Button
         android:id="@+id/enviarMSG"
-        android:layout_width="300dp"
+        android:layout_width="240dp"
         android:layout_height="67dp"
         android:background="@drawable/boton_redondo"
         android:text="Enviar"
@@ -32,13 +32,13 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.855"
+        app:layout_constraintHorizontal_bias="0.906"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.024" />
 
     <EditText
-        android:id="@+id/edit_text"
+        android:id="@+id/mensaje"
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:gravity="top"
