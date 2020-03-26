@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     Button registrar, iniciar;
     EditText getUsuario, getPass;
     RequestQueue requestQueue;
+    Boolean session = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validarUsuario("https://sqliteludens.000webhostapp.com/connect/validar_usuarios.php?id_usuario="
-                        +getUsuario.getText()+"&&password="+getPass.getText()+"");
+                        +getUsuario.getText().toString()+"&&password="+getPass.getText().toString()+"");
             }
         });
         registrar.setOnClickListener(new View.OnClickListener() {
@@ -116,19 +117,18 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 JSONObject jsonObject = null;
                 String id_usuario, tipo, name, surname, email, password;
-                Boolean session;
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         jsonObject = response.getJSONObject(i);
-                        if (jsonObject.getString("id_usuario").equals(getUsuario.getText())) {
+                        if (jsonObject.getString("id_usuario").equals(getUsuario.getText().toString())) {
                             Intent inte = new Intent(MainActivity.this, Inicio.class);
                             startActivity(inte);
                             id_usuario=jsonObject.getString("id_usuario");
-                            tipo=jsonObject.getString("id_usuario");
-                            name=jsonObject.getString("id_usuario");
-                            surname=jsonObject.getString("id_usuario");
-                            email=jsonObject.getString("id_usuario");
-                            password=jsonObject.getString("id_usuario");
+                            tipo=jsonObject.getString("tipo");
+                            name=jsonObject.getString("name");
+                            surname=jsonObject.getString("surname");
+                            email=jsonObject.getString("email");
+                            password=jsonObject.getString("password");
                             session=true;
                             guardarPreferencuas(id_usuario, password, tipo, name, surname, email, session);
                         }
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error de conexion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         }
         );
