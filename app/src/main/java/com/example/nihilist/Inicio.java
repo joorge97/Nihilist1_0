@@ -55,6 +55,18 @@ public class Inicio extends AppCompatActivity {
         lista.add("HOLA");
         lista.add("HOLA");
         lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
+        lista.add("HOLA");
 
         adaptador = new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
         listView.setAdapter(adaptador);
