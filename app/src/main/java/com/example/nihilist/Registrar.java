@@ -40,8 +40,6 @@ public class Registrar extends AppCompatActivity {
     Spinner tipo;
     EditText password;
     Button registrar, ayuda;
-    ListView opciones;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -72,13 +72,21 @@ public class Inicio extends AppCompatActivity {
     }
 
 
-
+    /**
+     *  CARGAMOS LOS DATOS DEL USUARIO
+     * @param usuario
+     */
     private void cargarPreferencias(Button usuario) {
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String user = preferences.getString("name", "No existe");
         usuario.setText(user);
     }
 
+    /**
+     * CARGAMOS LOS MENSAJES
+     * @param URL
+     * @return
+     */
     private ArrayList<String> cargarMensajes(String URL){
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
