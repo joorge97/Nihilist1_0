@@ -31,6 +31,7 @@ public class Inicio extends AppCompatActivity {
     ArrayList<String> lista = new ArrayList<String>();
     ListView listView;
     RequestQueue requestQueue;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class Inicio extends AppCompatActivity {
         refrescar=(Button)findViewById(R.id.refrescar);
 
         cargarPreferencias(usuario);
-        lista=cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+usuario.getText().toString());
+        cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+id);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,22 +54,18 @@ public class Inicio extends AppCompatActivity {
             }
         });
 
-        // desarrollo de la bbdd
-        lista.add("HOLA");
+        adaptador = new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
+        listView.setAdapter(adaptador);
         refrescar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast toast = Toast.makeText(v.getContext(), "Refrescando mensajes.", Toast.LENGTH_SHORT);
                 toast.show();
-                lista.clear();
-                lista=cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+usuario.getText().toString());
+                cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+id);
                 adaptador = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,lista);
                 listView.setAdapter(adaptador);
             }
         });
-        adaptador = new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
-        listView.setAdapter(adaptador);
-
     }
 
 
@@ -79,6 +76,7 @@ public class Inicio extends AppCompatActivity {
     private void cargarPreferencias(Button usuario) {
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String user = preferences.getString("name", "No existe");
+        id=preferences.getString("user", "No existe");
         usuario.setText(user);
     }
 
@@ -87,7 +85,7 @@ public class Inicio extends AppCompatActivity {
      * @param URL
      * @return
      */
-    private ArrayList<String> cargarMensajes(String URL){
+    private void cargarMensajes(String URL){
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -95,7 +93,7 @@ public class Inicio extends AppCompatActivity {
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         jsonObject = response.getJSONObject(i);
-                        lista.add("De:"+jsonObject.getString("name")+": "+jsonObject.getString("message"));
+                        lista.add("De: "+jsonObject.getString("name")+": "+jsonObject.getString("message"));
                     } catch (JSONException e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -110,6 +108,5 @@ public class Inicio extends AppCompatActivity {
         );
         requestQueue= Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
-        return lista;
     }
 }
