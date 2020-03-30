@@ -14,13 +14,11 @@ public class BD_Helper extends SQLiteOpenHelper {
     }
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(EstructuraDB.SQL_CREATE_MENSAJES);
-        db.execSQL(EstructuraDB.SQL_CREATE_USUARIOS);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
         db.execSQL(EstructuraDB.SQL_DELETE_MENSAJES);
-        db.execSQL(EstructuraDB.SQL_DELETE_USUARIOS);
         onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

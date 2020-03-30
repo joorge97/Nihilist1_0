@@ -56,6 +56,7 @@ public class Inicio extends AppCompatActivity {
 
         adaptador = new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
         listView.setAdapter(adaptador);
+
         refrescar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +65,13 @@ public class Inicio extends AppCompatActivity {
                 cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+id);
                 adaptador = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,lista);
                 listView.setAdapter(adaptador);
+            }
+        });
+
+        listView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listView.getSelectedItem();
             }
         });
     }
