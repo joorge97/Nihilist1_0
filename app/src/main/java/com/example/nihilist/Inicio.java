@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -22,13 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Inicio extends AppCompatActivity {
 
     Button usuario, enviar, refrescar;
     ArrayAdapter adaptador;
-    ArrayList<String> lista = new ArrayList<String>();
+    final ArrayList<String> lista = new ArrayList<String>();
     ListView listView;
     RequestQueue requestQueue;
     String id;
@@ -38,13 +40,17 @@ public class Inicio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
-        usuario=(Button) findViewById(R.id.usuario);
-        listView =(ListView)findViewById(R.id.list);
         enviar=(Button) findViewById(R.id.enviarMSG);
         refrescar=(Button)findViewById(R.id.refrescar);
+        usuario=(Button) findViewById(R.id.usuario);
 
         cargarPreferencias(usuario);
+
+        // RELLENA EL LISTVIEW
         cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+id);
+        listView =(ListView)findViewById(R.id.list);
+        adaptador = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,lista);
+        listView.setAdapter(adaptador);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,9 +59,6 @@ public class Inicio extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        adaptador = new ArrayAdapter(this,android.R.layout.simple_list_item_1,lista);
-        listView.setAdapter(adaptador);
 
         refrescar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,10 +71,13 @@ public class Inicio extends AppCompatActivity {
             }
         });
 
-        listView.setOnClickListener(new View.OnClickListener() {
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                listView.getSelectedItem();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent inteni = new Intent(Inicio.this, MuestraMensaje.class);
+                guardarMensaje(lista.get(listView.getSelectedItemPosition()));
+                startActivity(inteni);
             }
         });
     }
@@ -94,6 +100,9 @@ public class Inicio extends AppCompatActivity {
      * @return
      */
     private void cargarMensajes(String URL){
+        for (int i=0; i<lista.size();i++){
+            lista.remove(i);
+        }
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -116,5 +125,18 @@ public class Inicio extends AppCompatActivity {
         );
         requestQueue= Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
+    }
+
+    /**
+     * GUARDA MENSAJE PARA LA VENTANA DE MOSTRAR MENSAJES COMPLETOS
+     * @param msge
+     */
+    private void guardarMensaje(String msge) {
+        SharedPreferences preferences = getSharedPreferences("mensaje", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =  preferences.edit();
+
+        editor.putString("msge", msge);
+
+        editor.commit();
     }
 }

@@ -23,7 +23,7 @@
 
     <Button
         android:id="@+id/enviarMSG"
-        android:layout_width="240dp"
+        android:layout_width="230dp"
         android:layout_height="67dp"
         android:background="@drawable/boton_redondo"
         android:text="Enviar"

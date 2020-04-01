@@ -1,11 +1,13 @@
 package com.example.nihilist;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +34,7 @@ import java.util.Map;
  */
 public class MainActivity extends AppCompatActivity {
 
-    Button registrar, iniciar;
+    Button registrar, iniciar, ayuda;
     EditText getUsuario, getPass;
     RequestQueue requestQueue;
     Boolean session = false;
@@ -48,17 +50,20 @@ public class MainActivity extends AppCompatActivity {
         iniciar = (Button) findViewById(R.id.btniniciar);
         getUsuario = (EditText) findViewById(R.id.getDNI);
         getPass = (EditText) findViewById(R.id.getPass);
+        ayuda = (Button) findViewById(R.id.btnAyuda);
 
-        getUsuario.setOnClickListener(new View.OnClickListener() {
+        getUsuario.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 getUsuario.setText("");
+                return false;
             }
         });
-        getPass.setOnClickListener(new View.OnClickListener() {
+        getPass.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 getPass.setText("");
+                return false;
             }
         });
 
@@ -77,6 +82,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        // BOTON DE AYUDA
+        ayuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+                alerta.setMessage("Introduce tu usuario y contraseña")
+                        .setCancelable(true);
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Ayuda");
+                titulo.show();
+            }
+        });
+
+
     }
 
     /**
@@ -104,6 +124,11 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    /**
+     * CARGA EL USUARIO Y LA PASSWORD POR DEFECTO
+     * @param getUsuario
+     * @param getPass
+     */
     private void cargarPreferencias(EditText getUsuario, EditText getPass){
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         getUsuario.setText(preferences.getString("user", "Example."));
@@ -111,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * METODO PARA VALIDAR EL ACCESO DEL USUARIO
+     * @param URL
+     */
     private void validarUsuario(String URL){
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override

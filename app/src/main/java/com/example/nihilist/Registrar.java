@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -60,43 +61,48 @@ public class Registrar extends AppCompatActivity {
         tipo.setAdapter(adapter);
 
         // FUNCIONES VISUALES
-        dni.setOnClickListener(new View.OnClickListener() {
+        dni.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 dni.setText("");
                 dni.setTextColor(getResources().getColor(R.color.colorAccent));
+                return false;
             }
         });
 
-        email.setOnClickListener(new View.OnClickListener() {
+        email.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 email.setText("");
                 email.setTextColor(getResources().getColor(R.color.colorAccent));
+                return false;
             }
         });
 
-        nombre.setOnClickListener(new View.OnClickListener() {
+        nombre.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 nombre.setText("");
                 nombre.setTextColor(getResources().getColor(R.color.colorAccent));
+                return false;
             }
         });
 
-        apellido.setOnClickListener(new View.OnClickListener() {
+        apellido.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 apellido.setText("");
                 apellido.setTextColor(getResources().getColor(R.color.colorAccent));
+                return false;
             }
         });
 
-        password.setOnClickListener(new View.OnClickListener() {
+        password.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 password.setText("");
                 password.setTextColor(getResources().getColor(R.color.colorAccent));
+                return false;
             }
         });
 
@@ -106,6 +112,7 @@ public class Registrar extends AppCompatActivity {
             public void onClick(View v) {
                 if (validarDNI(dni.getText().toString())==false){
                     dni.setError("Este campo no cumple las condiciones [0-9]&[aA-zZ]");
+                    Toast.makeText(getApplicationContext(), "Este campo no cumple las condiciones [0-9]&[aA-zZ]", Toast.LENGTH_SHORT).show();
                 }else{
                     if (validarEmail(email.getText().toString())==false){
                         email.setError("Este campo no cumple las condiciones [A-Za-z0-9][@][a-z].[a-z]");

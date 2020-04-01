@@ -9,6 +9,22 @@
     android:background="@color/colorAccent">
 
     <Button
+        android:id="@+id/btnAyuda"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/boton_redondo_ayuda"
+        android:text="\?"
+        android:textColor="@color/whiteBase"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024" />
+
+    <Button
         android:id="@+id/btniniciar"
         android:layout_width="250dp"
         android:layout_height="42dp"
@@ -132,7 +148,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.113" />
+        app:layout_constraintVertical_bias="0.167" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
