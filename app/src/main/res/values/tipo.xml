@@ -3,5 +3,6 @@
     <string-array name="opciones">
         <item>Alumno</item>
         <item>Profesor</item>
+        <item>Padre/Madre</item>
     </string-array>
 </resources>

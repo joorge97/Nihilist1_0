@@ -71,13 +71,20 @@ public class Inicio extends AppCompatActivity {
             }
         });
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent inteni = new Intent(Inicio.this, MuestraMensaje.class);
                 guardarMensaje(lista.get(listView.getSelectedItemPosition()));
                 startActivity(inteni);
+            }
+        });
+
+        usuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentUsuarioConf= new Intent(Inicio.this, Usuario.class);
+                startActivity(intentUsuarioConf);
             }
         });
     }
