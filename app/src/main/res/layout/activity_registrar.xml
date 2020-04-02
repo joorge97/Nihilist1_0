@@ -44,7 +44,7 @@
         android:layout_height="67dp"
         android:background="@color/colorAccent"
         android:gravity="center"
-        android:text="Formulario"
+        android:text="Registro"
         android:textColor="@color/whiteBase"
         android:textSize="18sp"
         android:textStyle="bold"
