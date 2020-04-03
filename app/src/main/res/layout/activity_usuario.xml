@@ -38,11 +38,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
+    <TextView
         android:id="@+id/noFunction1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorAccent"
+        android:gravity="center"
         android:text="TIPO"
         android:textColor="@color/whiteBase"
         android:textSize="18sp"
@@ -53,11 +54,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.155" />
 
-    <Button
+    <TextView
         android:id="@+id/noFunction2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorAccent"
+        android:gravity="center"
         android:text="NOMBRE"
         android:textColor="@color/whiteBase"
         android:textSize="18sp"
@@ -68,11 +70,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.310" />
 
-    <Button
+    <TextView
         android:id="@+id/noFunction3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorAccent"
+        android:gravity="center"
         android:text="APELLIDO"
         android:textColor="@color/whiteBase"
         android:textSize="18sp"
@@ -83,11 +86,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.465" />
 
-    <Button
+    <TextView
         android:id="@+id/noFunction4"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorAccent"
+        android:gravity="center"
         android:text="EMAIL"
         android:textColor="@color/whiteBase"
         android:textSize="18sp"
@@ -98,11 +102,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.620" />
 
-    <Button
+    <TextView
         android:id="@+id/noFunction5"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorAccent"
+        android:gravity="center"
         android:text="CONTRASEÑA"
         android:textColor="@color/whiteBase"
         android:textSize="18sp"
