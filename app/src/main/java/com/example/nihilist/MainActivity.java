@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 validarUsuario("https://sqliteludens.000webhostapp.com/connect/validar_usuarios.php?id_usuario="
                         +getUsuario.getText().toString()+"&&password="+getPass.getText().toString()+"");
+                iniciar.setBackgroundColor(R.drawable.boton_redondo_secundario);
             }
         });
         registrar.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, Registrar.class);
                 startActivity(i);
+                registrar.setBackgroundColor(R.drawable.boton_redondo_secundario);
             }
         });
 
