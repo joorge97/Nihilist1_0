@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -23,14 +25,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Inicio extends AppCompatActivity {
 
-    Button usuario, enviar, refrescar;
+    TextView usuario;
+    ImageButton btnUsuario, enviarMSG;
+    Button enviar, refrescar;
     ArrayAdapter adaptador;
-    final ArrayList<String> lista = new ArrayList<String>();
+    ArrayList<String> lista = new ArrayList<String>();
     ListView listView;
     RequestQueue requestQueue;
     String id;
@@ -40,19 +43,17 @@ public class Inicio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
-        enviar=(Button) findViewById(R.id.enviarMSG);
+        btnUsuario=(ImageButton) findViewById(R.id.btnUsuario);
+        enviarMSG=(ImageButton) findViewById(R.id.enviarMSG);
         refrescar=(Button)findViewById(R.id.refrescar);
-        usuario=(Button) findViewById(R.id.usuario);
+        usuario=(TextView) findViewById(R.id.usuario);
 
         cargarPreferencias(usuario);
 
         // RELLENA EL LISTVIEW
-        cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+id);
-        listView =(ListView)findViewById(R.id.list);
-        adaptador = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,lista);
-        listView.setAdapter(adaptador);
+        cargarUsuarios("https://sqliteludens.000webhostapp.com/connect/obtMensajesOneUser.php?toid="+id);
 
-        enviar.setOnClickListener(new View.OnClickListener() {
+        enviarMSG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Inicio.this, Enviar.class);
@@ -65,22 +66,25 @@ public class Inicio extends AppCompatActivity {
             public void onClick(View v) {
                 Toast toast = Toast.makeText(v.getContext(), "Refrescando mensajes.", Toast.LENGTH_SHORT);
                 toast.show();
-                cargarMensajes("https://sqliteludens.000webhostapp.com/connect/getmensajes.php?toid="+id);
-                adaptador = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,lista);
-                listView.setAdapter(adaptador);
+                cargarUsuarios("https://sqliteludens.000webhostapp.com/connect/obtMensajesOneUser.php?toid="+id);
             }
         });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent inteni = new Intent(Inicio.this, MuestraMensaje.class);
-                guardarMensaje(lista.get(listView.getSelectedItemPosition()));
-                startActivity(inteni);
+                try {
+                    Intent inteni = new Intent(Inicio.this, Chat.class);
+                    guardarUsuario("de salty");
+                    //(String) listView.getSelectedItem()
+                    startActivity(inteni);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
-        usuario.setOnClickListener(new View.OnClickListener() {
+        btnUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentUsuarioConf= new Intent(Inicio.this, Usuario.class);
@@ -94,11 +98,11 @@ public class Inicio extends AppCompatActivity {
      *  CARGAMOS LOS DATOS DEL USUARIO
      * @param usuario
      */
-    private void cargarPreferencias(Button usuario) {
+    private void cargarPreferencias(TextView usuario) {
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String user = preferences.getString("name", "No existe");
         id=preferences.getString("user", "No existe");
-        usuario.setText(user);
+        usuario.setText("   "+user);
     }
 
     /**
@@ -106,10 +110,13 @@ public class Inicio extends AppCompatActivity {
      * @param URL
      * @return
      */
-    private void cargarMensajes(String URL){
+    private void cargarUsuarios(String URL){
+        listView =(ListView)findViewById(R.id.listaChat);
         for (int i=0; i<lista.size();i++){
             lista.remove(i);
         }
+        adaptador = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,lista);
+        listView.setAdapter(adaptador);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -117,7 +124,7 @@ public class Inicio extends AppCompatActivity {
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         jsonObject = response.getJSONObject(i);
-                        lista.add("De: "+jsonObject.getString("name")+": "+jsonObject.getString("message"));
+                        lista.add("De: "+jsonObject.getString("name")+" "+jsonObject.getString("fecha"));
                     } catch (JSONException e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -132,13 +139,19 @@ public class Inicio extends AppCompatActivity {
         );
         requestQueue= Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
+
+        try {
+            Thread.sleep(5*1000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
-     * GUARDA MENSAJE PARA LA VENTANA DE MOSTRAR MENSAJES COMPLETOS
+     * GUARDA EL USUARIO PARA LA VENTANA DE MOSTRAR MENSAJES COMPLETOS
      * @param msge
      */
-    private void guardarMensaje(String msge) {
+    private void guardarUsuario(String msge) {
         SharedPreferences preferences = getSharedPreferences("mensaje", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor =  preferences.edit();
 

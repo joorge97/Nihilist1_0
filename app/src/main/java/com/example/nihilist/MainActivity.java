@@ -11,30 +11,26 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Jorge
  */
 public class MainActivity extends AppCompatActivity {
 
-    Button registrar, iniciar, ayuda;
+    ImageButton registrar, iniciar;
+    Button ayuda;
     EditText getUsuario, getPass;
     RequestQueue requestQueue;
     Boolean session = false;
@@ -46,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         //cargarPreferencias(getUsuario, getPass);
 
-        registrar = (Button) findViewById(R.id.btnregistrar);
-        iniciar = (Button) findViewById(R.id.btniniciar);
+        registrar = (ImageButton) findViewById(R.id.btnregistrar);
+        iniciar = (ImageButton) findViewById(R.id.btniniciar);
         getUsuario = (EditText) findViewById(R.id.getDNI);
         getPass = (EditText) findViewById(R.id.getPass);
         ayuda = (Button) findViewById(R.id.btnAyuda);
@@ -56,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 getUsuario.setText("");
+                getUsuario.setTextColor(getResources().getColor(R.color.colorAccent));
                 return false;
             }
         });
@@ -63,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 getPass.setText("");
+                getPass.setTextColor(getResources().getColor(R.color.colorAccent));
                 return false;
             }
         });
@@ -76,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 iniciar.setBackgroundColor(R.drawable.boton_redondo_secundario);
             }
         });
+
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

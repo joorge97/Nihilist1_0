@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,7 +37,8 @@ import java.util.Map;
 public class Enviar extends AppCompatActivity {
 
     RequestQueue requestQueue;
-    Button usuario, enviar;
+    ImageButton enviar, limpiar;
+    TextView usuario;
     EditText mensaje;
     Spinner spinner;
     ArrayList<String> contactos = new ArrayList<String>();
@@ -45,9 +50,10 @@ public class Enviar extends AppCompatActivity {
 
         contactos.add("Selecciona:");
 
-        usuario = (Button) findViewById(R.id.usuario);
+        usuario = (TextView) findViewById(R.id.usuario);
         spinner = (Spinner)  findViewById(R.id.comboUser);
-        enviar = (Button) findViewById(R.id.enviarMSG);
+        enviar = (ImageButton) findViewById(R.id.enviarMSG);
+        limpiar = (ImageButton) findViewById(R.id.btnLimpiar);
         mensaje = (EditText) findViewById(R.id.mensaje);
 
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, contactos));
@@ -55,7 +61,6 @@ public class Enviar extends AppCompatActivity {
         cargarPreferencias(usuario);
 
         cargarUsuarios("https://sqliteludens.000webhostapp.com/connect/getallusers.php");
-        cargarPreferencias(usuario);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,19 +72,26 @@ public class Enviar extends AppCompatActivity {
                 toast.show();
             }
         });
+
+        limpiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mensaje.setText("");
+            }
+        });
     }
 
     /**
      * CARGA LAS PREFERENCIAS
      * @param usuario
      */
-    private void cargarPreferencias(Button usuario) {
+    private void cargarPreferencias(TextView usuario) {
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String user = preferences.getString("user", "No existe");
         usuario.setText(user);
     }
 
-    /**
+    /**     
      * ENVIA MENSAJES
      * @param URL
      */

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -40,14 +41,15 @@ public class Registrar extends AppCompatActivity {
     EditText apellido;
     Spinner tipo;
     EditText password;
-    Button registrar, ayuda;
+    Button ayuda;
+    ImageButton registrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
 
-        registrar = (Button) findViewById(R.id.registrar);
+        registrar = (ImageButton) findViewById(R.id.registrar);
         ayuda = (Button) findViewById(R.id.ayuda);
         dni = (EditText) findViewById(R.id.getDNI);
         email = (EditText) findViewById(R.id.getEmail);

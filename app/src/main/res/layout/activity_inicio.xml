@@ -7,6 +7,7 @@
     tools:context=".Inicio">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,40 +17,42 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/refrescar"
-            android:layout_width="210dp"
+        <TextView
+            android:id="@+id/usuario"
+            android:layout_width="match_parent"
             android:layout_height="67dp"
-            android:background="@drawable/boton_redondo"
-            android:text="Refrescar"
+            android:background="@color/colorAccent"
+            android:gravity="center|left"
+            android:text=""
             android:textColor="@color/whiteBase"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.862"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.515" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/usuario"
-            android:layout_width="wrap_content"
+            android:id="@+id/refrescar"
+            android:layout_width="67dp"
             android:layout_height="67dp"
-            android:background="@drawable/boton_redondo"
+            android:background="@android:drawable/stat_notify_sync_noanim"
             android:textColor="@color/whiteBase"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.12"
+            app:layout_constraintHorizontal_bias="0.953"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.515" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bot"
         android:layout_width="match_parent"
         android:layout_height="91dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,37 +62,47 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <Button
+        <ImageButton
             android:id="@+id/enviarMSG"
-            android:layout_width="230dp"
+            android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/boton_redondo"
-            android:text="Enviar"
-            android:textColor="@color/whiteBase"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:src="@android:drawable/ic_dialog_email"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.307"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.238" />
+            app:layout_constraintVertical_bias="0.476" />
+
+        <ImageButton
+            android:id="@+id/btnUsuario"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/boton_redondo"
+            app:srcCompat="@drawable/ic_launcher_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.721"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.476" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="550dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/bot"
+        app:layout_constraintEnd_toEndOf="@id/bot"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/top"
+        app:layout_constraintTop_toTopOf="@id/top"
         app:layout_constraintVertical_bias="0.497">
 
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/listaChat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +110,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
